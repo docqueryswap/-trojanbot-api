@@ -9,8 +9,7 @@ const WEB_REF = "https://trojan.com/@Satoshit";
 // ===== SIMPLE ANALYTICS =====
 let analytics = {
   total_requests: 0,
-  signals_served: 0,
-  intents_created: 0
+  routes_served: 0
 };
 
 app.use((req, res, next) => {
@@ -19,191 +18,204 @@ app.use((req, res, next) => {
 });
 
 // ======================================================
-// ROOT
+// ROOT (API IDENTITY)
 // ======================================================
 app.get("/", (req, res) => {
   res.json({
-    service: "Trojan Feature Gateway API",
+    service: "Trojan Execution Gateway API",
     status: "online",
+    purpose: "discovery_and_routing",
+    data_type: "simulated",
+    not_real_market_data: true,
     available_features: [
-      "Pump.fun Signals",
-      "Copy Trading (Simulated)",
-      "Token Audits",
-      "Real-Time Alerts",
-      "Historic Data",
-      "Watchlists",
-      "Custom PNL Cards",
-      "Perpetual Indicators"
+      "Routing to Trojan for Copy Trading",
+      "Routing to Trojan for Token Analysis",
+      "Routing to Trojan for Alerts",
+      "Routing to Trojan for Execution"
     ],
+    disclaimer:
+      "This API provides simulated preview data only and never executes trades or provides real market data.",
     analytics
   });
 });
 
 // ======================================================
-// PUMP.FUN TRENDING (YOU ALREADY HAD THIS — ENHANCED)
+// PUMP.FUN DISCOVERY (SIMULATED PREVIEW)
 // ======================================================
 app.get("/pumpfun/trending", (req, res) => {
-  analytics.signals_served++;
+  analytics.routes_served++;
 
   res.json({
-    status: "signal",
-    source: "pump.fun",
-    token: {
-      symbol: "WIF2",
-      mint: "ABC123...",
-      age_minutes: 18,
-      holders: 423,
-      market_cap_usd: 182000,
-      liquidity_usd: 54000
+    data_type: "simulated",
+    purpose: "discovery_and_routing",
+    not_real_market_data: true,
+
+    platform_context: "pump.fun",
+    source: "trojan-demo",
+
+    signal_preview: {
+      interest: "bullish",
+      confidence_score: 0.82,
+      description:
+        "Example preview to demonstrate how developers can route users to Trojan for real analysis and execution."
     },
-    trading_activity: {
-      volume_5m: 12000,
-      buys_5m: 148,
-      sells_5m: 61,
-      buy_sell_ratio: 2.42
-    },
-    trojan_analytics: {
-      confidence: 0.82,
-      momentum: "strong",
-      risk_level: "medium",
-      whale_activity: "detected",
-      strategy: "early momentum scalp"
-    },
-    execute: {
-      telegram: TG_REF,
-      web: WEB_REF
+
+    disclaimer:
+      "This data is simulated and provided for demonstration and routing purposes only. It is not real market data and must not be used for trading decisions.",
+
+    next_step: {
+      action: "use_trojan_for_real_features",
+      execute: {
+        telegram: {
+          label: "Analyze & Trade via Trojan Telegram Bot",
+          url: TG_REF
+        },
+        web: {
+          label: "Analyze & Trade via Trojan Web Terminal",
+          url: WEB_REF
+        }
+      }
     }
   });
 });
 
 // ======================================================
-// COPY TRADING (SIMULATED)
+// COPY TRADING (ROUTING ONLY)
 // ======================================================
 app.get("/copy-trading/top-wallets", (req, res) => {
+  analytics.routes_served++;
+
   res.json({
-    feature: "copy_trading",
-    description: "Top performing wallets (simulated)",
-    wallets: [
-      { wallet: "7xA...9Qp", pnl_7d: "+124%", winrate: "78%" },
-      { wallet: "9Fz...Lm2", pnl_7d: "+96%", winrate: "71%" }
-    ],
-    copy_via: {
-      telegram: TG_REF,
-      web: WEB_REF
+    data_type: "simulated",
+    purpose: "routing_only",
+    feature: "copy_trading_preview",
+
+    description:
+      "Preview endpoint to route users to Trojan for real copy trading features.",
+
+    disclaimer:
+      "No wallet performance data is provided. All copy trading occurs externally on Trojan.",
+
+    next_step: {
+      execute: {
+        telegram: TG_REF,
+        web: WEB_REF
+      }
     }
   });
 });
 
 // ======================================================
-// TOKEN AUDIT (SIMULATED)
+// TOKEN ANALYSIS (ROUTING ONLY)
 // ======================================================
 app.get("/token/audit", (req, res) => {
-  const token = req.query.token || "UNKNOWN";
+  analytics.routes_served++;
 
   res.json({
-    feature: "token_audit",
-    token,
-    audit: {
-      mint_verified: true,
-      lp_locked: false,
-      honeypot_risk: "medium",
-      contract_risk_score: 6.4
-    },
-    trade_with: {
-      telegram: TG_REF,
-      web: WEB_REF
+    data_type: "simulated",
+    purpose: "routing_only",
+    feature: "token_analysis_preview",
+
+    description:
+      "Preview endpoint to direct users to Trojan for full token analysis and audits.",
+
+    disclaimer:
+      "This endpoint does not perform real audits or contract analysis.",
+
+    next_step: {
+      execute: {
+        telegram: TG_REF,
+        web: WEB_REF
+      }
     }
   });
 });
 
 // ======================================================
-// REAL-TIME ALERTS (SIMULATED)
+// ALERTS (ROUTING ONLY)
 // ======================================================
 app.get("/alerts/latest", (req, res) => {
+  analytics.routes_served++;
+
   res.json({
-    feature: "real_time_alerts",
-    alerts: [
-      { type: "volume_spike", token: "WIF2", change: "+320%" },
-      { type: "whale_buy", token: "DOGX", amount_usd: 18000 }
-    ],
-    enable_alerts_via: {
-      telegram: TG_REF,
-      web: WEB_REF
+    data_type: "simulated",
+    purpose: "routing_only",
+    feature: "alerts_preview",
+
+    description:
+      "Preview alerts to demonstrate routing users to Trojan for real-time alerts.",
+
+    disclaimer:
+      "No real alerts are generated by this API.",
+
+    next_step: {
+      execute: {
+        telegram: TG_REF,
+        web: WEB_REF
+      }
     }
   });
 });
 
 // ======================================================
-// HISTORIC DATA
-// ======================================================
-app.get("/historic/price", (req, res) => {
-  const token = req.query.token || "WIF2";
-
-  res.json({
-    feature: "historic_data",
-    token,
-    prices: [
-      { t: "T-15m", price: 0.004 },
-      { t: "T-10m", price: 0.005 },
-      { t: "T-5m", price: 0.007 }
-    ]
-  });
-});
-
-// ======================================================
-// WATCHLISTS
+// WATCHLISTS (ROUTING ONLY)
 // ======================================================
 app.get("/watchlists/sample", (req, res) => {
+  analytics.routes_served++;
+
   res.json({
-    feature: "watchlists",
-    watchlist_name: "Pump.fun Hot Picks",
-    tokens: ["WIF2", "DOGX", "PEEP"],
-    manage_via: {
-      telegram: TG_REF,
-      web: WEB_REF
+    data_type: "simulated",
+    purpose: "routing_only",
+    feature: "watchlists_preview",
+
+    description:
+      "Sample watchlist preview directing users to Trojan for real watchlist management.",
+
+    next_step: {
+      execute: {
+        telegram: TG_REF,
+        web: WEB_REF
+      }
     }
   });
 });
 
 // ======================================================
-// CUSTOM PNL CARD (SIMULATED)
+// PNL (ROUTING ONLY)
 // ======================================================
 app.get("/pnl/card", (req, res) => {
+  analytics.routes_served++;
+
   res.json({
-    feature: "custom_pnl_card",
-    wallet: "Simulated",
-    pnl_24h: "+18.4%",
-    pnl_7d: "+112%",
-    share_via: {
-      telegram: TG_REF,
-      web: WEB_REF
+    data_type: "simulated",
+    purpose: "routing_only",
+    feature: "pnl_preview",
+
+    description:
+      "Demonstration PnL preview routing users to Trojan for real performance tracking.",
+
+    disclaimer:
+      "No real profit or loss data is calculated by this API.",
+
+    next_step: {
+      execute: {
+        telegram: TG_REF,
+        web: WEB_REF
+      }
     }
   });
 });
 
 // ======================================================
-// PERPETUALS (SIMULATED SIGNAL)
-// ======================================================
-app.get("/perps/indicator", (req, res) => {
-  res.json({
-    feature: "perpetuals",
-    market: "SOL-PERP",
-    funding_rate: "0.012%",
-    bias: "long",
-    trade_via: {
-      telegram: TG_REF,
-      web: WEB_REF
-    }
-  });
-});
-
-// ======================================================
-// ANALYTICS (FOR YOU)
+// ANALYTICS (INTERNAL)
 // ======================================================
 app.get("/analytics", (req, res) => {
-  res.json(analytics);
+  res.json({
+    usage: analytics,
+    note: "Internal usage metrics only."
+  });
 });
 
 app.listen(PORT, () => {
-  console.log("Trojan Feature Gateway API running on port " + PORT);
+  console.log("Trojan Execution Gateway API running on port " + PORT);
 });
